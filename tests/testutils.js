@@ -1,6 +1,9 @@
 function assert(x, msg) {
   if (!x) {
-    throw 'Assertion: ' + (msg || 'Failure') + ' at ' + new Error().stack;
+    print('   Failure: ' + msg);
+    //print(new Error().stack);
+  } else {
+    print('   OK:      ' + msg);
   }
 }
 
@@ -26,3 +29,6 @@ function getClosureMapping() {
   return ret;
 }
 
+function print(s) {
+  console.log(s);
+}
