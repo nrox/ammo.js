@@ -55,7 +55,8 @@ var description = {
   }
 };
 
-function construct(constructor, args) {
+//FIXME change this to other form avoiding closures... memory problems potential??
+function instantiate(constructor, args) {
   //http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
   function F() {
     return constructor.apply(this, args);
@@ -65,13 +66,13 @@ function construct(constructor, args) {
   return new F();
 }
 
-function constructWithDescription(lib, list, desc) {
+function construct(lib, list, desc) {
   var args = [];
   var arg;
   var s;
   var fn;
   if (typeof list == 'string') {
-    return constructWithDescription(lib, list.split(' '), desc);
+    return construct(lib, list.split(' '), desc);
   }
   for (var i in list) {
     if (!list.hasOwnProperty(i)) continue;
@@ -92,20 +93,22 @@ function constructWithDescription(lib, list, desc) {
         }
         break;
       case 'object':
-        args.push(constructWithDescription(lib, args, desc));
+        args.push(construct(lib, args, desc));
+        break;
     }
   }
-  return construct(fn, args);
+  return instantiate(fn, args);
 }
 
 
 function Shape(type, data) {
   var desc = _.extend(_.clone(description.shape[type]), data || {});
-  this.bullet = constructWithDescription(Ammo, desc.bullet, desc);
+  this.bullet = construct(Ammo, desc.bullet, desc);
 }
 
-var v3;
-//console.log(v3 = new Shape('box'));
 
-debugLog('btVector3', constructWithDescription(Ammo, ['btVector3', 'dx', 'dy', 'dz'], {dx: 1, dy: 2, dz: 3}));
-debugLog('btVector3', constructWithDescription(Ammo, ['btVector3', -1, -2, -3]));
+debugLog('btVector3', construct(Ammo, ['btVector3', 'dx', 'dy', 'dz'], {dx: 1, dy: 2, dz: 3}));
+debugLog('btVector3', construct(Ammo, ['btVector3', -1, -2, -3]));
+
+module.exports.description = description;
+module.exports.construct = construct;

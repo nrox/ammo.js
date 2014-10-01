@@ -1,7 +1,7 @@
 function tryCall(obj, list){
   for (var i = 0; i < list.length; i++){
     try {
-      console.log(list[i] + "() => " + obj[list[i]]());
+      console.log("  " + list[i] + "() => " + obj[list[i]]());
     } catch (e){
       console.log("failed " + list[i] + "()   exists? " + !!obj[list[i]]);
     }
