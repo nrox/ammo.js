@@ -2,8 +2,11 @@
  Data representation of objects
  */
 var _ = require('./lib/underscore.js');
-var Ammo = require('../builds/ammo.js');
-var debugLog = require('./debug-log.js');
+
+var lib = {
+  ammo: undefined,
+  three: undefined
+};
 
 var description = {
   physics: {
@@ -17,24 +20,40 @@ var description = {
   //shapes
   shape: {
     sphere: {
-      r: 1,
-      bullet: ['btSphereShape', 'r'],
-      three: ['SphereGeometry', 'r']
+      parameters: {
+        r: 1
+      },
+      constructors: {
+        ammo: ['btSphereShape', 'r'],
+        three: ['SphereGeometry', 'r']
+      }
     },
     box: {
-      dx: 1, dy: 1, dz: 1,
-      bullet: ['btBoxShape', ['btVector3', 'dx', 'dy', 'dz']],
-      three: ['BoxGeometry', 'dx', 'dy', 'dz']
+      parameters: {
+        dx: 1, dy: 1, dz: 1
+      },
+      constructors: {
+        ammo: ['btBoxShape', ['btVector3', 'dx', 'dy', 'dz']],
+        three: ['BoxGeometry', 'dx', 'dy', 'dz']
+      }
     },
     cylinder: {
-      r: 1, dy: 1,
-      bullet: ['btCylinderShape', ['btVector3', 'r', 'dy', 'r']],
-      three: ['CylinderGeometry', 'r', 'r', 'dy']
+      parameters: {
+        r: 1, dy: 1
+      },
+      constructors: {
+        ammo: ['btCylinderShape', ['btVector3', 'r', 'dy', 'r']],
+        three: ['CylinderGeometry', 'r', 'r', 'dy']
+      }
     },
     cone: {
-      r: 1, dy: 1,
-      bullet: ['btConeShape', 'r', 'dy'],
-      three: ['CylinderGeometry', 0, 'r', 'dy']
+      parameters: {
+        r: 1, dy: 1
+      },
+      constructors: {
+        ammo: ['btConeShape', 'r', 'dy'],
+        three: ['CylinderGeometry', 0, 'r', 'dy']
+      }
     }
   },
   material: {
@@ -55,7 +74,7 @@ var description = {
   }
 };
 
-//FIXME change this to other form avoiding closures... memory problems potential??
+//create an instance using a list of arguments
 function instantiate(constructor, args) {
   //http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
   function F() {
@@ -66,14 +85,12 @@ function instantiate(constructor, args) {
   return new F();
 }
 
+//create an instance of an object, using the description
 function construct(lib, list, desc) {
   var args = [];
   var arg;
   var s;
   var fn;
-  if (typeof list == 'string') {
-    return construct(lib, list.split(' '), desc);
-  }
   for (var i in list) {
     if (!list.hasOwnProperty(i)) continue;
     arg = list[i];
@@ -93,22 +110,44 @@ function construct(lib, list, desc) {
         }
         break;
       case 'object':
-        args.push(construct(lib, args, desc));
+        args.push(construct(lib, arg, desc));
         break;
+      default:
+        args.push(arg);
     }
   }
   return instantiate(fn, args);
 }
 
-
-function Shape(type, data) {
-  var desc = _.extend(_.clone(description.shape[type]), data || {});
-  this.bullet = construct(Ammo, desc.bullet, desc);
+//set three.js
+function setThree(three) {
+  lib.three = three;
+}
+//set ammo.js
+function setAmmo(ammo) {
+  lib.ammo = ammo;
 }
 
+//extend an object using a description
+function extendFromDescription(obj, group, type, parameters) {
+  parameters = _.extend(_.clone(description[group][type].parameters), parameters || {});
+  _.extend(obj, parameters);
+  var constructionLists = description[group][type].constructors || {};
+  for (var l in lib) { //lib{ammo, three}
+    if (lib.hasOwnProperty(l) && lib[l] && constructionLists[l])
+      obj[l] = construct(lib[l], constructionLists[l], parameters);
+  }
+}
 
-debugLog('btVector3', construct(Ammo, ['btVector3', 'dx', 'dy', 'dz'], {dx: 1, dy: 2, dz: 3}));
-debugLog('btVector3', construct(Ammo, ['btVector3', -1, -2, -3]));
+function Shape(type, parameters) {
+  var group, obj;
+  extendFromDescription(obj = this, group = 'shape', type, parameters);
+}
 
-module.exports.description = description;
-module.exports.construct = construct;
+module.exports = {
+  setThree: setThree,
+  setAmmo: setAmmo,
+  description: description,
+  construct: construct,
+  Shape: Shape
+};

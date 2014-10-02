@@ -20,9 +20,27 @@ var tests = {
   }
 };
 
-function Log(type, obj){
-  console.log(type);
-  tests[type](obj);
+function log(obj, title){
+  console.log(title);
+  console.log(obj);
 }
 
-module.exports = Log;
+function inspect(obj, title){
+  console.log(title);
+  for (var i in obj){
+    console.log('  ' + i + ': ' + obj[i]);
+  }
+}
+
+function keys(obj, title){
+  console.log(title);
+  for (var i in obj){
+    console.log('  ' + i);
+  }
+}
+
+module.exports = {
+  log: log,
+  inspect: inspect,
+  keys: keys
+};
