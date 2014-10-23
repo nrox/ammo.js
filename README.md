@@ -1,27 +1,30 @@
-Mechanisms simulation.
-
-## Physics Engine
-
 Based on a [bullet physics](http://bulletphysics.org/) port to javascript: [kripken/ammo.js](https://github.com/kripken/ammo.js "kripken/ammo.js").
 
 
 ##ammo.idl changes
 
-###reference
+##reference
 
 Refer to [webidl ref](http://kripken.github.io/emscripten-site/docs/porting/connecting_cpp_and_javascript/WebIDL-Binder.html)
 
-###discussion
+##discussion
 
 [issue 60](https://github.com/kripken/ammo.js/issues/60)
 
-###example
+##examples
 
-btVector3.cross was added with this line to interface btVector3:
+<function>
+	<bullet.h>
+	<ammo.idl>
 
+btVector3.cross
+        btVector3       cross (const btVector3 &v) const
 	[Value] btVector3 cross([Const,Ref] btVector3 v);
 
-in bullet:
+btMatrix3x3.setValue:
+	void 	setValue (const btScalar &xx, const btScalar &xy, const btScalar &xz, 
+				const btScalar &yx, const btScalar &yy, const btScalar &yz, 
+				const btScalar &zx, const btScalar &zy, const btScalar &zz)
 
-	btVector3 	cross (const btVector3 &v) const
+	void setValue (float xx, float xy, float xz, float yx, float yy, float yz, float zx, float zy, float zz);
 
