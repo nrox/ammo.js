@@ -1,7 +1,5 @@
-Based on a [bullet physics](http://bulletphysics.org/) port to javascript: [kripken/ammo.js](https://github.com/kripken/ammo.js "kripken/ammo.js").
 
-
-##ammo.idl changes
+this fork is for ammo.idl changes mainly, to have a richer set of features
 
 ##reference
 
