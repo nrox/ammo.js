@@ -1,5 +1,4 @@
-
-this fork is for ammo.idl changes mainly, to have a richer set of features
+ammo.idl
 
 ##reference
 
