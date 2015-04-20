@@ -12,7 +12,8 @@ INCLUDES = [
   os.path.join('BulletDynamics', 'Character', 'btKinematicCharacterController.h'),
   os.path.join('BulletDynamics', 'MLCPSolvers', 'btMLCPSolverInterface.h'),
   os.path.join('BulletDynamics', 'MLCPSolvers', 'btMLCPSolver.h'),
-  os.path.join('BulletDynamics', 'MLCPSolvers', 'btDantzigSolver.h')
+  os.path.join('BulletDynamics', 'MLCPSolvers', 'btDantzigSolver.h'),
+  os.path.join('BulletDynamics', 'MLCPSolvers', 'btSolveProjectedGaussSeidel.h')
 ]
 
 # Startup
