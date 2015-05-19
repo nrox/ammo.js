@@ -549,6 +549,8 @@ interface btCollisionWorld {
   void contactPairTest([Const] btCollisionObject colObjA, [Const] btCollisionObject colObjB, [Ref] ContactResultCallback resultCallback);  
   void updateSingleAabb(btCollisionObject colObj); 
   void updateAabbs();
+  boolean getForceUpdateAllAabbs();
+  void setForceUpdateAllAabbs (boolean forceUpdateAllAabbs);
 };
 
 interface btContactSolverInfo {
