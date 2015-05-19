@@ -548,6 +548,7 @@ interface btCollisionWorld {
   void convexSweepTest([Const] btConvexShape castShape, [Const, Ref] btTransform from, [Const, Ref] btTransform to, [Ref] ConvexResultCallback resultCallback, float allowedCcdPenetration); 
   void contactPairTest([Const] btCollisionObject colObjA, [Const] btCollisionObject colObjB, [Ref] ContactResultCallback resultCallback);  
   void updateSingleAabb(btCollisionObject colObj); 
+  void updateAabbs();
 };
 
 interface btContactSolverInfo {
