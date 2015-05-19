@@ -196,9 +196,13 @@ interface btCollisionShape {
   void setLocalScaling([Const, Ref] btVector3 scaling);
   [Const,Ref] btVector3 getLocalScaling();
   void calculateLocalInertia(float mass, [Ref] btVector3 inertia);
+  void getAabb([Const, Ref] btTransform t, [Ref] btVector3 aabbMin, [Ref] btVector3 aabbMax);
 };
 
 interface btConvexShape {
+  void getAabb([Const, Ref] btTransform t, [Ref] btVector3 aabbMin, [Ref] btVector3 aabbMax);
+  void setLocalScaling ([Const, Ref] btVector3 scaling);
+  [Const, Ref] btVector3 getLocalScaling();
 };
 btConvexShape implements btCollisionShape;
 
@@ -351,6 +355,7 @@ interface btCollisionConfiguration {
 
 interface btDbvtBroadphase {
   void btDbvtBroadphase();
+  void printStats();	
 };
 
 
